@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo01.dao.UserDao">
+
+    <select id="getAllByUserName" resultType="com.example.demo01.entity.UserEntity">
+        select * from user  where username = #{username};
+    </select>
+
+    <insert id="addUser">
+        insert into user set username=#{username} , password = #{password};
+    </insert>
+
+    <delete id="deleteRow">
+        delete from user where username = #{username};
+    </delete>
+
+
+    <!--从customer表查询存在于user表中username字段的customer的department值-->
+    <select id="findDepartment" resultType="java.util.HashMap">
+        select department from customer c inner join user u where c.customer=u.username;
+    </select>
+    <!--左连接查询-->
+    <select id="findAgePassword" resultType="java.util.HashMap">
+        select c.age,u.password from customer c left join user u on c.customer=u.username;
+    </select>
+
+</mapper>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo01.dao.DataDao">
+
+    <select id="getAll" resultType="com.example.demo01.entity.DataEntity">
+        select * from user
+    </select>
+
+<!--    <select id="getAllByUserName" resultType="com.example.demo01.entity.DataEntity">-->
+<!--        select * from user t where t.username = #{username}-->
+<!--    </select>-->
+
+    <select id="getByPage" resultType="com.example.demo01.entity.DataEntity">
+        <choose>
+            <when test="datatype !=null and  datatype == 'mysql'">
+                select b.* from (select a.*, rownum as ro from (SELECT t.* FROM user t order by t.id) a) b where b.ro between ${offset+1} and ${offset+limit}
+            </when>
+            <otherwise>
+                select * from user order by username limit #{limit} offset #{offset}
+            </otherwise>
+        </choose>
+    </select>
+
+    <insert id="addRow">
+        insert into user values(#{username},#{password});
+    </insert>
+
+    <update id="updateByUserName">
+        update user
+        set password = #{password}
+        where username = #{username};
+    </update>
+
+    <delete id="deleteRowByUserName">
+        delete from user where username = #{username};
+    </delete>
+</mapper>
